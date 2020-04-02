@@ -8,15 +8,18 @@ amqp.connect("amqp://localhost", function (err, connection) {
         if (err) {
             throw err
         }
-        var queue = 'task_queue';
-        var msg = process.argv.slice(2).join(' ') || "Hello World!";
+        var queue = 'myFirstQueue';
+        var msg = "Message Number -"
 
         channel.assertQueue(queue, {
-            durable: true
+            durable: false
         });
-        channel.sendToQueue(queue, Buffer.from(msg), {
-            persistent: true
-        });
+
+        for(var i = 1; i <= 100; i++){
+            var finalMsg = `${msg} ${i}`
+            channel.sendToQueue(queue, Buffer.from(finalMsg));
+        }
+        
         console.log(" [x] Sent '%s'", msg);
 
         setTimeout(function () {

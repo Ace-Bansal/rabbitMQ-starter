@@ -8,22 +8,19 @@ amqp.connect("amqp://localhost", function (err, conn) {
         if (err) {
             throw err;
         }
-        var queue = 'task_queue';
+        var queue = 'myFirstQueue';
 
         channel.assertQueue(queue, {
-            durable: true
+            durable: false
         });
 
         channel.consume(queue, function (msg) {
-            var secs = msg.content.toString().split('.').length - 1;
-
             console.log(" [x] Received %s", msg.content.toString());
             setTimeout(function () {
                 console.log(" [x] Done");
-            }, secs * 1000);
+            }, 3000);
         }, {
             noAck: false
         });
     })
 })
-
